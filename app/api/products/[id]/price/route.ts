@@ -3,9 +3,10 @@ export const runtime = "edge";
 import { db } from "@/lib/db";
 import { getPriceFromMatrix } from "@/lib/price";
 
-export async function GET(req: Request, { params }: { params: Promise<{ id: number }> }) {
-    const { id } = await params;
-    if (isNaN(id)) return new Response("invalid id", { status: 400 });
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+    const { id: idStr } = await params;
+    const id = Number(idStr);
+    if (!Number.isInteger(id)) return new Response("invalid id", { status: 400 });
 
     const url = new URL(req.url);
     const size = url.searchParams.get("size");
